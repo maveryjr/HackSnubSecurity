@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { ShieldCheck, Lock, Server, Key, FileCheck, Clock, User, AlertTriangle, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { ShieldCheck, Lock, Server, Key, FileCheck, Clock, User, AlertTriangle, AlertCircle, AlertOctagon, CheckCircle, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 
 // Extend the base schema for the form
 const formSchema = assessmentResponseSchema.extend({
@@ -351,11 +351,41 @@ export default function Assessment() {
     }
   };
 
-  // Get score color based on value
+  // Get score color and mood based on value
   const getScoreColor = (score: number) => {
+    if (score < 20) return "bg-red-600";
     if (score < 40) return "bg-red-500";
+    if (score < 55) return "bg-orange-500";
     if (score < 70) return "bg-yellow-500";
-    return "bg-green-500";
+    if (score < 85) return "bg-green-500";
+    return "bg-green-400";
+  };
+  
+  // Get score mood text
+  const getScoreMood = (score: number) => {
+    if (score < 20) return "Critical Risk";
+    if (score < 40) return "High Risk";
+    if (score < 55) return "Moderate Risk";
+    if (score < 70) return "Moderate-Low Risk";
+    if (score < 85) return "Low Risk";
+    return "Very Secure";
+  };
+  
+  // Get associated mood icon
+  const getMoodIcon = (score: number) => {
+    if (score < 20) return <AlertOctagon className="w-6 h-6 text-red-600" />;
+    if (score < 40) return <AlertTriangle className="w-6 h-6 text-red-500" />;
+    if (score < 55) return <AlertCircle className="w-6 h-6 text-orange-500" />;
+    if (score < 70) return <AlertCircle className="w-6 h-6 text-yellow-500" />;
+    if (score < 85) return <CheckCircle className="w-6 h-6 text-green-500" />;
+    return <ShieldCheck className="w-6 h-6 text-green-400" />;
+  };
+  
+  // Get animation class for different score ranges
+  const getMoodAnimation = (score: number) => {
+    if (score < 40) return "animate-pulse";
+    if (score < 70) return "animate-bounce";
+    return "animate-none";
   };
 
   // Get severity badge color
@@ -389,53 +419,62 @@ export default function Assessment() {
               <div className="flex flex-col md:flex-row items-center md:space-x-8">
                 <div
                   className={cn(
-                    "w-32 h-32 rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4 md:mb-0 shadow-md transition-all duration-500 animate-pulse",
-                    getScoreColor(assessmentResult.score)
+                    "w-32 h-32 rounded-full flex flex-col items-center justify-center text-white font-bold text-3xl mb-4 md:mb-0 shadow-lg transition-all duration-700",
+                    getScoreColor(assessmentResult.score),
+                    getMoodAnimation(assessmentResult.score)
                   )}
                 >
-                  {assessmentResult.score}%
+                  <div className="flex items-center justify-center">
+                    {assessmentResult.score}%
+                  </div>
+                  <div className="mt-1">
+                    {getMoodIcon(assessmentResult.score)}
+                  </div>
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-lg font-semibold mb-2">
-                    {assessmentResult.score < 40
-                      ? "High Risk"
-                      : assessmentResult.score < 70
-                      ? "Moderate Risk"
-                      : "Low Risk"}
+                  <h4 className="text-lg font-semibold mb-2 flex items-center">
+                    <span className="mr-2">{getScoreMood(assessmentResult.score)}</span>
+                    {getMoodIcon(assessmentResult.score)}
                   </h4>
                   <p className="text-gray-700">
-                    {assessmentResult.score < 40
+                    {assessmentResult.score < 20
+                      ? "Your security posture is at critical risk. Immediate action is required to address serious security vulnerabilities in your organization."
+                      : assessmentResult.score < 40
                       ? "Your security posture needs significant improvement. We recommend addressing the high-priority issues immediately to reduce your cybersecurity risk."
+                      : assessmentResult.score < 55
+                      ? "Your security posture has some concerning gaps. Focus on the recommendations below to strengthen your security stance."
                       : assessmentResult.score < 70
                       ? "Your security is average but there's room for improvement. Focus on the recommendations below to strengthen your security posture."
-                      : "Your security posture is strong, but continued vigilance is needed. Even with a good score, regular security reviews are essential."}
+                      : assessmentResult.score < 85
+                      ? "Your security posture is good, but continued vigilance is needed. Regular security reviews are essential."
+                      : "Your security posture is very strong. Keep up the good work and continue to stay vigilant against emerging threats."}
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+              <div className="bg-red-50 p-4 rounded-lg border border-red-100 hover:shadow-md transition-all duration-300">
                 <h4 className="font-medium flex items-center text-red-800">
-                  <AlertTriangle className="w-5 h-5 mr-2 text-red-500" />
+                  <AlertOctagon className="w-5 h-5 mr-2 text-red-600 animate-pulse" />
                   High Priority
                 </h4>
                 <p className="text-sm text-gray-700 mt-1">
                   Issues that require immediate attention due to significant security risks
                 </p>
               </div>
-              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100 hover:shadow-md transition-all duration-300">
                 <h4 className="font-medium flex items-center text-yellow-800">
-                  <AlertTriangle className="w-5 h-5 mr-2 text-yellow-500" />
+                  <AlertCircle className="w-5 h-5 mr-2 text-yellow-500" />
                   Medium Priority
                 </h4>
                 <p className="text-sm text-gray-700 mt-1">
                   Issues that should be addressed in the near future to improve security
                 </p>
               </div>
-              <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+              <div className="bg-green-50 p-4 rounded-lg border border-green-100 hover:shadow-md transition-all duration-300">
                 <h4 className="font-medium flex items-center text-green-800">
-                  <ShieldCheck className="w-5 h-5 mr-2 text-green-500" />
+                  <CheckCircle className="w-5 h-5 mr-2 text-green-500" />
                   Low Priority
                 </h4>
                 <p className="text-sm text-gray-700 mt-1">
@@ -454,10 +493,10 @@ export default function Assessment() {
                     <div 
                       key={index} 
                       className={cn(
-                        "border rounded-lg p-5 shadow-sm transition-all duration-300 hover:shadow-md",
-                        rec.severity.toLowerCase() === "high" ? "border-l-4 border-l-red-500" :
-                        rec.severity.toLowerCase() === "medium" ? "border-l-4 border-l-yellow-500" :
-                        "border-l-4 border-l-green-500"
+                        "border rounded-lg p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]",
+                        rec.severity.toLowerCase() === "high" ? "border-l-4 border-l-red-500 bg-gradient-to-r from-white to-red-50" :
+                        rec.severity.toLowerCase() === "medium" ? "border-l-4 border-l-yellow-500 bg-gradient-to-r from-white to-yellow-50" :
+                        "border-l-4 border-l-green-500 bg-gradient-to-r from-white to-green-50"
                       )}
                     >
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
@@ -475,11 +514,17 @@ export default function Assessment() {
                         <div className="md:text-right">
                           <span
                             className={cn(
-                              "px-3 py-1 text-sm rounded-full text-white uppercase inline-block font-medium",
+                              "px-3 py-1 text-sm rounded-full text-white uppercase inline-flex items-center font-medium",
                               getSeverityColor(rec.severity)
                             )}
                           >
-                            {rec.severity}
+                            {rec.severity.toLowerCase() === "high" ? (
+                              <><AlertOctagon className="w-3 h-3 mr-1" /> {rec.severity}</>
+                            ) : rec.severity.toLowerCase() === "medium" ? (
+                              <><AlertCircle className="w-3 h-3 mr-1" /> {rec.severity}</>
+                            ) : (
+                              <><CheckCircle className="w-3 h-3 mr-1" /> {rec.severity}</>
+                            )}
                           </span>
                           
                           {rec.estimatedCost && (
