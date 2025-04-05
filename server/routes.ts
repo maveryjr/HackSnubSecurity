@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertLeadSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { sendLeadNotification } from "./email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes for lead form
@@ -17,6 +18,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...validatedData,
         createdAt: new Date().toISOString(),
       });
+
+      // Send email notification
+      try {
+        await sendLeadNotification({
+          name: validatedData.name,
+          email: validatedData.email,
+          phone: validatedData.phone || '',
+          company: validatedData.company,
+          employees: validatedData.employees,
+        });
+        console.log("Lead notification email sent successfully");
+      } catch (emailError) {
+        // Don't fail the request if email fails, just log it
+        console.error("Error sending lead notification email:", emailError);
+      }
 
       return res.status(201).json({
         message: "Lead created successfully",
