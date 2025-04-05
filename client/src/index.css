@@ -135,3 +135,14 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #ADFF6C;
 }
+
+/* Hide the Replit branding button */
+a[href^="https://replit.com"],
+a[aria-label="Made with Replit"],
+a[href^="https://replit.com/@teams"],
+.cartographer {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
