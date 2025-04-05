@@ -63,6 +63,9 @@ export const recommendations = pgTable("recommendations", {
   severity: text("severity").notNull(),    // "high", "medium", "low"
   recommendation: text("recommendation").notNull(),
   implementationDetails: text("implementation_details"),
+  benefits: text("benefits"),              // Benefits of implementing this recommendation
+  estimatedCost: text("estimated_cost"),   // Estimated cost to implement
+  timeframe: text("timeframe"),            // Estimated timeframe to implement
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

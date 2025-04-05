@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { ShieldCheck, Lock, Server, Key, FileCheck, Clock, User, AlertTriangle } from "lucide-react";
+import { ShieldCheck, Lock, Server, Key, FileCheck, Clock, User, AlertTriangle, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 
 // Extend the base schema for the form
 const formSchema = assessmentResponseSchema.extend({
@@ -30,8 +30,8 @@ type Question = {
   id: string;
   category: string;
   question: string;
-  description?: string;
-  type: "radio" | "checkbox" | "range";
+  description?: string; // Make description optional
+  type: string; // Use string instead of enum to accommodate all possible values
   options?: { value: any; label: string }[];
   icon?: React.ReactNode;
 };
@@ -209,6 +209,70 @@ export default function Assessment() {
           ],
           icon: <AlertTriangle className="w-5 h-5 text-lime-500" />,
         },
+        {
+          id: "securityPolicies",
+          category: "policy",
+          question: "Which security policies does your organization have documented?",
+          description: "Select all that apply to your organization.",
+          type: "checkbox",
+          options: [
+            { value: "acceptable_use", label: "Acceptable Use Policy" },
+            { value: "data_protection", label: "Data Protection Policy" },
+            { value: "byod", label: "Bring Your Own Device (BYOD) Policy" },
+            { value: "remote_work", label: "Remote Work Security Policy" },
+            { value: "disaster_recovery", label: "Disaster Recovery Plan" },
+          ],
+          icon: <FileCheck className="w-5 h-5 text-lime-500" />,
+        },
+      ],
+    },
+    // Compliance and Risk
+    {
+      title: "Compliance and Risk Management",
+      description: "Assess your compliance posture and risk management practices",
+      questions: [
+        {
+          id: "riskAssessment",
+          category: "risk",
+          question: "How often does your organization perform security risk assessments?",
+          type: "radio",
+          options: [
+            { value: 0, label: "Never" },
+            { value: 1, label: "Only when required by clients/partners" },
+            { value: 3, label: "Annually" },
+            { value: 5, label: "Quarterly or more frequently" },
+          ],
+          icon: <AlertTriangle className="w-5 h-5 text-lime-500" />,
+        },
+        {
+          id: "thirdPartyRisk",
+          category: "vendor",
+          question: "Do you assess the security of your vendors and third-party providers?",
+          description: "This includes reviewing their security practices before engagement.",
+          type: "radio",
+          options: [
+            { value: true, label: "Yes" },
+            { value: false, label: "No" },
+          ],
+          icon: <User className="w-5 h-5 text-lime-500" />,
+        },
+        {
+          id: "complianceFrameworks",
+          category: "compliance",
+          question: "Which compliance frameworks does your organization follow?",
+          description: "Select all that apply to your organization.",
+          type: "checkbox",
+          options: [
+            { value: "pci_dss", label: "PCI DSS" },
+            { value: "hipaa", label: "HIPAA" },
+            { value: "gdpr", label: "GDPR" },
+            { value: "ccpa", label: "CCPA/CPRA" },
+            { value: "soc2", label: "SOC 2" },
+            { value: "iso27001", label: "ISO 27001" },
+            { value: "none", label: "None" },
+          ],
+          icon: <FileCheck className="w-5 h-5 text-lime-500" />,
+        },
       ],
     },
   ];
@@ -285,103 +349,212 @@ export default function Assessment() {
   if (assessmentResult) {
     return (
       <div className="container max-w-4xl mx-auto py-8 px-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Your Security Assessment Results</CardTitle>
-            <CardDescription>
+        <Card className="overflow-hidden border-0 shadow-lg">
+          <div className="bg-[#1A1A1A] p-6 text-center">
+            <h1 className="text-3xl font-bold text-[#ADFF6C] mb-2">Your Security Assessment Results</h1>
+            <p className="text-gray-300">
               Based on your responses, here's how your organization's security measures up
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-8">
-              <h3 className="text-lg font-medium mb-2">Security Score</h3>
-              <div className="flex items-center space-x-4">
+            </p>
+          </div>
+          <CardContent className="p-6">
+            <div className="mb-8 bg-gray-100 p-6 rounded-lg">
+              <h3 className="text-xl font-bold mb-4 text-gray-800">Security Score</h3>
+              <div className="flex flex-col md:flex-row items-center md:space-x-8">
                 <div
                   className={cn(
-                    "w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-2xl",
+                    "w-32 h-32 rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4 md:mb-0 shadow-md transition-all duration-500 animate-pulse",
                     getScoreColor(assessmentResult.score)
                   )}
                 >
                   {assessmentResult.score}%
                 </div>
-                <div>
-                  <p className="text-sm">
+                <div className="flex-1">
+                  <h4 className="text-lg font-semibold mb-2">
                     {assessmentResult.score < 40
-                      ? "Your security posture needs significant improvement"
+                      ? "High Risk"
                       : assessmentResult.score < 70
-                      ? "Your security is average but there's room for improvement"
-                      : "Your security posture is strong, but continued vigilance is needed"}
+                      ? "Moderate Risk"
+                      : "Low Risk"}
+                  </h4>
+                  <p className="text-gray-700">
+                    {assessmentResult.score < 40
+                      ? "Your security posture needs significant improvement. We recommend addressing the high-priority issues immediately to reduce your cybersecurity risk."
+                      : assessmentResult.score < 70
+                      ? "Your security is average but there's room for improvement. Focus on the recommendations below to strengthen your security posture."
+                      : "Your security posture is strong, but continued vigilance is needed. Even with a good score, regular security reviews are essential."}
                   </p>
                 </div>
               </div>
             </div>
 
-            <Separator className="my-6" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+                <h4 className="font-medium flex items-center text-red-800">
+                  <AlertTriangle className="w-5 h-5 mr-2 text-red-500" />
+                  High Priority
+                </h4>
+                <p className="text-sm text-gray-700 mt-1">
+                  Issues that require immediate attention due to significant security risks
+                </p>
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                <h4 className="font-medium flex items-center text-yellow-800">
+                  <AlertTriangle className="w-5 h-5 mr-2 text-yellow-500" />
+                  Medium Priority
+                </h4>
+                <p className="text-sm text-gray-700 mt-1">
+                  Issues that should be addressed in the near future to improve security
+                </p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+                <h4 className="font-medium flex items-center text-green-800">
+                  <ShieldCheck className="w-5 h-5 mr-2 text-green-500" />
+                  Low Priority
+                </h4>
+                <p className="text-sm text-gray-700 mt-1">
+                  Suggestions that will further enhance your already good security posture
+                </p>
+              </div>
+            </div>
+
+            <Separator className="my-8" />
 
             <div>
-              <h3 className="text-lg font-medium mb-4">Key Recommendations</h3>
-              <div className="space-y-4">
+              <h3 className="text-xl font-bold mb-6 text-gray-800">Custom Security Recommendations</h3>
+              <div className="space-y-6">
                 {assessmentResult.recommendations && assessmentResult.recommendations.length > 0 ? (
                   assessmentResult.recommendations.map((rec: any, index: number) => (
-                    <div key={index} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="font-medium">{rec.recommendation}</h4>
-                          <p className="text-sm text-gray-600 mt-1">{rec.implementationDetails}</p>
-                        </div>
-                        <span
-                          className={cn(
-                            "px-2 py-1 text-xs rounded text-white uppercase",
-                            getSeverityColor(rec.severity)
+                    <div 
+                      key={index} 
+                      className={cn(
+                        "border rounded-lg p-5 shadow-sm transition-all duration-300 hover:shadow-md",
+                        rec.severity.toLowerCase() === "high" ? "border-l-4 border-l-red-500" :
+                        rec.severity.toLowerCase() === "medium" ? "border-l-4 border-l-yellow-500" :
+                        "border-l-4 border-l-green-500"
+                      )}
+                    >
+                      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-lg">{rec.recommendation}</h4>
+                          <p className="text-gray-600 mt-2">{rec.implementationDetails}</p>
+                          
+                          {rec.benefits && (
+                            <div className="mt-3">
+                              <h5 className="text-sm font-medium text-gray-700">Benefits:</h5>
+                              <p className="text-sm text-gray-600 mt-1">{rec.benefits}</p>
+                            </div>
                           )}
-                        >
-                          {rec.severity}
-                        </span>
+                        </div>
+                        <div className="md:text-right">
+                          <span
+                            className={cn(
+                              "px-3 py-1 text-sm rounded-full text-white uppercase inline-block font-medium",
+                              getSeverityColor(rec.severity)
+                            )}
+                          >
+                            {rec.severity}
+                          </span>
+                          
+                          {rec.estimatedCost && (
+                            <div className="mt-2 text-sm text-gray-600">
+                              <span className="font-medium">Est. Cost: </span>
+                              {rec.estimatedCost}
+                            </div>
+                          )}
+                          
+                          {rec.timeframe && (
+                            <div className="mt-1 text-sm text-gray-600">
+                              <span className="font-medium">Timeframe: </span>
+                              {rec.timeframe}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p>No specific recommendations at this time.</p>
+                  <div className="text-center p-8 bg-gray-50 rounded-lg">
+                    <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+                    <h4 className="text-lg font-medium">No Recommendations Generated</h4>
+                    <p className="text-gray-600 mt-1">
+                      There was an issue generating your recommendations. Please try again or contact us for assistance.
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
+            
+            <div className="mt-12 bg-[#1A1A1A] p-6 rounded-lg text-white">
+              <h3 className="text-xl font-bold mb-3 text-[#ADFF6C]">Next Steps</h3>
+              <p className="mb-4">
+                Schedule a consultation with our security experts to discuss your assessment results in detail 
+                and develop a customized security plan for your organization.
+              </p>
+              <div className="flex items-center space-x-2 text-sm">
+                <ShieldCheck className="w-5 h-5 text-[#ADFF6C]" />
+                <span>Full assessment review with a security expert</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm mt-2">
+                <ShieldCheck className="w-5 h-5 text-[#ADFF6C]" />
+                <span>Customized security roadmap development</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm mt-2">
+                <ShieldCheck className="w-5 h-5 text-[#ADFF6C]" />
+                <span>Prioritized action plan based on your specific needs</span>
+              </div>
+            </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
+          <CardFooter className="flex flex-col sm:flex-row justify-between gap-4 p-6 bg-gray-50">
             <Button
               variant="outline"
               onClick={() => {
                 setLocation("/");
               }}
+              className="w-full sm:w-auto"
             >
               Return to Home
             </Button>
             <Button
               onClick={() => {
-                setLocation("/contact");
+                setLocation("/#contact");
               }}
+              className="w-full sm:w-auto bg-[#ADFF6C] hover:bg-[#8DCC4C] text-[#1A1A1A]"
             >
               Schedule a Consultation
             </Button>
           </CardFooter>
         </Card>
+        
+        <div className="mt-8 text-center text-gray-500 text-sm">
+          <p>
+            This assessment provides a basic overview of your security posture. 
+            For a comprehensive evaluation, we recommend a full security audit.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container max-w-3xl mx-auto py-8 px-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>HackSnub Security Assessment</CardTitle>
-          <CardDescription>
+      <Card className="border-0 shadow-lg overflow-hidden">
+        <div className="bg-[#1A1A1A] p-6">
+          <CardTitle className="text-2xl text-[#ADFF6C]">HackSnub Security Assessment</CardTitle>
+          <CardDescription className="text-gray-300 mt-2">
             Complete this short assessment to evaluate your organization's security posture
           </CardDescription>
-          <Progress value={progress} className="h-2 mt-4" />
-        </CardHeader>
-        <CardContent>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold">{currentSection.title}</h2>
-            <p className="text-sm text-gray-500">{currentSection.description}</p>
+          <Progress value={progress} className="h-2 mt-4 bg-gray-700">
+            <div className="h-full bg-[#ADFF6C]" style={{ width: `${progress}%` }} />
+          </Progress>
+        </div>
+        <CardContent className="p-6">
+          <div className="mb-8 p-4 bg-gray-50 rounded-lg border-l-4 border-[#ADFF6C]">
+            <h2 className="text-xl font-semibold text-gray-800">{currentSection.title}</h2>
+            <p className="text-sm text-gray-600 mt-1">{currentSection.description}</p>
+            <div className="flex items-center mt-3">
+              <ShieldCheck className="w-5 h-5 text-[#ADFF6C] mr-2" />
+              <span className="text-sm text-gray-600">Step {step + 1} of {totalSteps}</span>
+            </div>
           </div>
 
           <Form {...form}>
@@ -498,7 +671,7 @@ export default function Assessment() {
                                 <FormLabel className="text-base">{question.question}</FormLabel>
                               </div>
                               
-                              {question.description && (
+                              {'description' in question && question.description && (
                                 <FormDescription>{question.description}</FormDescription>
                               )}
                               
@@ -535,7 +708,7 @@ export default function Assessment() {
                       );
                     }
                     
-                    // For checkbox questions
+                    // For checkbox questions (multiple selection)
                     if (question.type === "checkbox") {
                       return (
                         <FormField
@@ -543,19 +716,46 @@ export default function Assessment() {
                           control={form.control}
                           name={`responses.${question.id}`}
                           render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel>{question.question}</FormLabel>
-                                {question.description && (
-                                  <FormDescription>{question.description}</FormDescription>
-                                )}
+                            <FormItem className="space-y-3">
+                              <div className="flex items-center space-x-2">
+                                {question.icon}
+                                <FormLabel className="text-base">{question.question}</FormLabel>
                               </div>
+                              
+                              {'description' in question && question.description && (
+                                <FormDescription>{question.description}</FormDescription>
+                              )}
+                              
+                              <div className="space-y-3">
+                                {question.options?.map((option) => (
+                                  <div key={option.value} className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`${question.id}-${option.value}`}
+                                      checked={
+                                        field.value && Array.isArray(field.value)
+                                          ? field.value.includes(option.value)
+                                          : false
+                                      }
+                                      onCheckedChange={(checked) => {
+                                        const currentValues = Array.isArray(field.value) ? [...field.value] : [];
+                                        
+                                        if (checked) {
+                                          field.onChange([...currentValues, option.value]);
+                                        } else {
+                                          field.onChange(currentValues.filter((value) => value !== option.value));
+                                        }
+                                      }}
+                                    />
+                                    <label 
+                                      htmlFor={`${question.id}-${option.value}`}
+                                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                      {option.label}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -567,17 +767,38 @@ export default function Assessment() {
                 </div>
               )}
 
-              <div className="flex justify-between pt-4">
+              <div className="flex justify-between pt-6 mt-4 border-t">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handlePrevious}
                   disabled={step === 0}
+                  className="border-gray-300 hover:bg-gray-100 hover:text-gray-900"
                 >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Previous
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
-                  {step === totalSteps - 1 ? "Submit Assessment" : "Continue"}
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="bg-[#ADFF6C] hover:bg-[#8DCC4C] text-[#1A1A1A] font-medium"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </div>
+                  ) : step === totalSteps - 1 ? (
+                    <div className="flex items-center">
+                      Submit Assessment
+                      <ShieldCheck className="ml-2 h-4 w-4" />
+                    </div>
+                  ) : (
+                    <div className="flex items-center">
+                      Continue
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </div>
+                  )}
                 </Button>
               </div>
             </form>
