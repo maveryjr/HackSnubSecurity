@@ -7,45 +7,63 @@ export default function Pricing() {
           <p className="text-xl max-w-2xl mx-auto">No hidden fees, no surprise costs—just straightforward security.</p>
         </div>
         
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Basic Plan */}
+        <div className="max-w-7xl mx-auto">
+          {/* Main pricing grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Service 1: Cybersecurity Training */}
             <div className="bg-[#1A1A1A] border border-[#ADFF6C]/20 rounded-lg overflow-hidden transform transition-all hover:-translate-y-1">
               <div className="bg-[#ADFF6C]/10 p-6">
-                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">HackSnub Basics</h3>
+                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">Cybersecurity Training</h3>
                 <div className="flex items-baseline">
                   <span className="text-4xl font-['Outfit'] font-bold">$299</span>
-                  <span className="ml-2 text-[#F5F5F5]/70">/month</span>
                 </div>
-                <p className="text-[#F5F5F5]/70 mt-2">Perfect for solo entrepreneurs and microbusinesses.</p>
+                <p className="text-[#F5F5F5]/70 mt-2">Per session (up to 10 attendees)</p>
               </div>
               <div className="p-6">
-                <ul className="space-y-4">
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Security assessment and basic protection plan</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Password management system</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Phishing awareness training (1 session)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Basic endpoint protection</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Email security scanning</span>
-                  </li>
-                </ul>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">What It Is:</p>
+                  <p>A 1–2 hour workshop teaching employees how to avoid phishing scams, use strong passwords, and follow basic security habits.</p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">Why It Matters:</p>
+                  <p>Most breaches (over 80%) come from human error—training is a quick win for protection.</p>
+                </div>
                 <div className="mt-8">
                   <a 
                     href="#contact" 
                     className="block text-center bg-[#5FD35F] hover:bg-[#ADFF6C] text-[#1A1A1A] font-['Outfit'] font-bold py-3 px-6 rounded-md transition-colors"
+                  >
+                    Book Training
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            {/* Service 2: Basic Security Setup */}
+            <div className="bg-[#1A1A1A] border-2 border-[#ADFF6C] rounded-lg overflow-hidden transform transition-all hover:-translate-y-1 relative">
+              <div className="absolute top-0 right-0 bg-[#ADFF6C] text-[#1A1A1A] px-4 py-1 font-['Outfit'] font-bold text-sm">
+                Most Popular
+              </div>
+              <div className="bg-[#ADFF6C]/20 p-6">
+                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">Basic Security Setup</h3>
+                <div className="flex items-baseline">
+                  <span className="text-4xl font-['Outfit'] font-bold">$599</span>
+                </div>
+                <p className="text-[#F5F5F5]/70 mt-2">One-time service</p>
+              </div>
+              <div className="p-6">
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">What It Is:</p>
+                  <p>A one-time service to install and configure essential tools like antivirus software, password managers, and two-factor authentication (2FA) on up to 5 devices.</p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">Why It Matters:</p>
+                  <p>Many small businesses lack these basics—HackSnub makes it hassle-free.</p>
+                </div>
+                <div className="mt-8">
+                  <a 
+                    href="#contact" 
+                    className="block text-center bg-[#ADFF6C] hover:bg-[#5FD35F] text-[#1A1A1A] font-['Outfit'] font-bold py-3 px-6 rounded-md transition-colors"
                   >
                     Get Started
                   </a>
@@ -53,52 +71,93 @@ export default function Pricing() {
               </div>
             </div>
             
-            {/* Pro Plan */}
-            <div className="bg-[#1A1A1A] border-2 border-[#ADFF6C] rounded-lg overflow-hidden transform transition-all hover:-translate-y-1 relative">
-              <div className="absolute top-0 right-0 bg-[#ADFF6C] text-[#1A1A1A] px-4 py-1 font-['Outfit'] font-bold text-sm">
-                Most Popular
-              </div>
-              <div className="bg-[#ADFF6C]/20 p-6">
-                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">HackSnub Pro</h3>
+            {/* Service 3: Phishing Simulation */}
+            <div className="bg-[#1A1A1A] border border-[#ADFF6C]/20 rounded-lg overflow-hidden transform transition-all hover:-translate-y-1">
+              <div className="bg-[#ADFF6C]/10 p-6">
+                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">Phishing Simulation</h3>
                 <div className="flex items-baseline">
-                  <span className="text-4xl font-['Outfit'] font-bold">$599</span>
-                  <span className="ml-2 text-[#F5F5F5]/70">/month</span>
+                  <span className="text-4xl font-['Outfit'] font-bold">$199</span>
                 </div>
-                <p className="text-[#F5F5F5]/70 mt-2">Ideal for small businesses with 5-25 employees.</p>
+                <p className="text-[#F5F5F5]/70 mt-2">Per test (up to 10 employees)</p>
               </div>
               <div className="p-6">
-                <ul className="space-y-4">
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Everything in Basics, plus:</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Advanced threat protection</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Quarterly security training for all staff</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>24/7 security monitoring</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>Incident response plan</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#ADFF6C] mr-3 mt-1"><i className="fas fa-check"></i></span>
-                    <span>VPN service for all employees</span>
-                  </li>
-                </ul>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">What It Is:</p>
+                  <p>Send fake phishing emails to test employees, then provide a 1-hour debrief with tips to improve.</p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">Why It Matters:</p>
+                  <p>Real-world practice helps employees spot threats.</p>
+                </div>
+                <div className="mt-8">
+                  <a 
+                    href="#contact" 
+                    className="block text-center bg-[#5FD35F] hover:bg-[#ADFF6C] text-[#1A1A1A] font-['Outfit'] font-bold py-3 px-6 rounded-md transition-colors"
+                  >
+                    Book Test
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Bundle and Subscription */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            {/* Bundle */}
+            <div className="bg-[#1A1A1A] border border-[#ADFF6C]/30 rounded-lg overflow-hidden transform transition-all hover:-translate-y-1">
+              <div className="bg-[#ADFF6C]/15 p-6">
+                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">HackSnub Starter Kit</h3>
+                <div className="flex items-baseline">
+                  <span className="text-4xl font-['Outfit'] font-bold">$999</span>
+                  <span className="ml-3 px-2 py-1 bg-[#ADFF6C] text-[#1A1A1A] text-xs font-bold rounded">Save 15%</span>
+                </div>
+                <p className="text-[#F5F5F5]/70 mt-2">Complete bundle</p>
+              </div>
+              <div className="p-6">
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">What It Is:</p>
+                  <p>Combines Training, Security Setup, and Phishing Simulation at a discount.</p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">Why It Matters:</p>
+                  <p>A one-stop solution to kickstart cybersecurity.</p>
+                </div>
                 <div className="mt-8">
                   <a 
                     href="#contact" 
                     className="block text-center bg-[#ADFF6C] hover:bg-[#5FD35F] text-[#1A1A1A] font-['Outfit'] font-bold py-3 px-6 rounded-md transition-colors"
                   >
-                    Get Started
+                    Get Bundle
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            {/* Ongoing Support */}
+            <div className="bg-[#1A1A1A] border border-[#ADFF6C]/20 rounded-lg overflow-hidden transform transition-all hover:-translate-y-1">
+              <div className="bg-[#ADFF6C]/10 p-6">
+                <h3 className="text-2xl font-['Outfit'] font-bold mb-2">Ongoing Support</h3>
+                <div className="flex items-baseline">
+                  <span className="text-4xl font-['Outfit'] font-bold">$99</span>
+                  <span className="ml-2 text-[#F5F5F5]/70">/month</span>
+                </div>
+                <p className="text-[#F5F5F5]/70 mt-2">First month free with Starter Kit</p>
+              </div>
+              <div className="p-6">
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">What It Is:</p>
+                  <p>Monthly check-ins, quarterly phishing tests, and priority support.</p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#F5F5F5]/70 mb-2">Why It Matters:</p>
+                  <p>Cybersecurity needs regular upkeep—this keeps clients protected long-term.</p>
+                </div>
+                <div className="mt-8">
+                  <a 
+                    href="#contact" 
+                    className="block text-center bg-[#5FD35F] hover:bg-[#ADFF6C] text-[#1A1A1A] font-['Outfit'] font-bold py-3 px-6 rounded-md transition-colors"
+                  >
+                    Subscribe
                   </a>
                 </div>
               </div>
