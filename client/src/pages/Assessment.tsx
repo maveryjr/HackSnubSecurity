@@ -296,10 +296,23 @@ export default function Assessment() {
       
       const responseData = await result.json();
       
-      setAssessmentResult({
-        score: responseData.data.score,
-        recommendations: responseData.recommendations || [],
-      });
+      // Fetch assessment details including recommendations
+      const assessmentId = responseData.data.assessment.id;
+      try {
+        const assessmentResult = await apiRequest("GET", `/api/assessments/${assessmentId}`);
+        const assessmentData = await assessmentResult.json();
+        
+        setAssessmentResult({
+          score: responseData.data.score,
+          recommendations: assessmentData.recommendations || [],
+        });
+      } catch (error) {
+        console.error("Error fetching assessment details:", error);
+        setAssessmentResult({
+          score: responseData.data.score,
+          recommendations: [],
+        });
+      }
       
       toast({
         title: "Assessment Complete!",

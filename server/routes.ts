@@ -400,41 +400,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get assessment by ID
-  app.get("/api/assessments/:id", async (req: Request, res: Response) => {
-    try {
-      const assessmentId = parseInt(req.params.id);
-      
-      if (isNaN(assessmentId)) {
-        return res.status(400).json({
-          message: "Invalid assessment ID",
-        });
-      }
-      
-      const assessment = await storage.getAssessment(assessmentId);
-      
-      if (!assessment) {
-        return res.status(404).json({
-          message: "Assessment not found",
-        });
-      }
-      
-      // Get recommendations for this assessment
-      const recommendations = await storage.getRecommendationsByAssessmentId(assessmentId);
-      
-      return res.status(200).json({
-        assessment,
-        recommendations,
-      });
-    } catch (error) {
-      console.error("Error fetching assessment:", error);
-      return res.status(500).json({
-        message: "Internal server error",
-      });
-    }
-  });
-  
-  // Get latest assessment by email
+  // Get latest assessment by email - IMPORTANT: This must be BEFORE the :id route to avoid conflicts
   app.get("/api/assessments/email/:email", async (req: Request, res: Response) => {
     try {
       const email = req.params.email;
@@ -455,6 +421,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Get recommendations for this assessment
       const recommendations = await storage.getRecommendationsByAssessmentId(assessment.id);
+      console.log(`Retrieved ${recommendations.length} recommendations for assessment ${assessment.id} (email: ${email})`);
       
       return res.status(200).json({
         assessment,
@@ -462,6 +429,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error("Error fetching assessment by email:", error);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  });
+  
+  // Get assessment by ID 
+  app.get("/api/assessments/:id", async (req: Request, res: Response) => {
+    try {
+      const assessmentId = parseInt(req.params.id);
+      
+      if (isNaN(assessmentId)) {
+        return res.status(400).json({
+          message: "Invalid assessment ID",
+        });
+      }
+      
+      const assessment = await storage.getAssessment(assessmentId);
+      
+      if (!assessment) {
+        return res.status(404).json({
+          message: "Assessment not found",
+        });
+      }
+      
+      // Get recommendations for this assessment
+      const recommendations = await storage.getRecommendationsByAssessmentId(assessmentId);
+      console.log(`Retrieved ${recommendations.length} recommendations for assessment ${assessmentId}`);
+      
+      return res.status(200).json({
+        assessment,
+        recommendations,
+      });
+    } catch (error) {
+      console.error("Error fetching assessment:", error);
       return res.status(500).json({
         message: "Internal server error",
       });
