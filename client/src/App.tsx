@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Admin from "@/pages/Admin";
 import Blog from "@/pages/Blog";
+import ReplitRemover from "@/components/ui/ReplotRemover";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router />
       <Toaster />
+      <ReplitRemover />
     </QueryClientProvider>
   );
 }

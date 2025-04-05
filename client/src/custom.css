@@ -1,0 +1,40 @@
+/* Hide the Replit branding button - specific targeting */
+a[href*="replit.com"],
+.cartographer,
+a[aria-label="Made with Replit"],
+a[href^="https://replit.com/@teams"],
+[data-replit-mode="true"],
+iframe[src*="replit.com"],
+div[style*="position: fixed; bottom: 0px; right: 0px;"],
+div[style*="z-index: 2147483647;"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Target more specifically */
+div[style*="position: fixed"][style*="bottom: 0px"][style*="right: 0px"],
+div[style*="position: fixed"][style*="z-index: 2147483647"],
+div[style*="position: fixed"][style*="bottom: 8px"][style*="right: 8px"] {
+  display: none !important;
+}
+
+/* Additional cleanup */
+body::after {
+  content: none !important;
+}
+
+/* Last resort - if all else fails */
+@media print {
+  a[href*="replit.com"],
+  .cartographer,
+  a[aria-label="Made with Replit"],
+  div[style*="position: fixed; bottom: 0px; right: 0px;"] {
+    display: none !important;
+  }
+}

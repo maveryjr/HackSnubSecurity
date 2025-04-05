@@ -4,13 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>HackSnub - Cybersecurity for Small Businesses</title>
+    <!-- Prevent Replit badge loading -->
+    <meta name="replit-disable-badge" content="true" />
+    <meta name="replit-disable-branding" content="true" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      /* Immediate CSS to hide Replit branding */
+      a[href*="replit.com"],
+      .cartographer,
+      a[aria-label="Made with Replit"],
+      div[style*="position: fixed; bottom: 0px; right: 0px;"] {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <!-- This script injects a replit badge into the page, please feel free to remove this line -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-badge-v3.js"></script>
+    <!-- Replit badge script has been removed at client's request -->
   </body>
 </html>
