@@ -21,7 +21,9 @@ function generateRecommendations(assessment: Assessment): InsertRecommendation[]
   const companySize = assessment.companySize;
   
   // Helper function to customize recommendations based on company size
-  const getEstimatedCost = (size: string, baseAmount: string): string => {
+  const getEstimatedCost = (size: string | null, baseAmount: string): string => {
+    if (!size) return baseAmount;
+    
     switch(size) {
       case '1-10': return baseAmount;
       case '11-50': return `${parseInt(baseAmount.replace(/[^0-9]/g, '')) * 1.5}/month`;
@@ -48,8 +50,8 @@ function generateRecommendations(assessment: Assessment): InsertRecommendation[]
   
   // Two-Factor Authentication
   if (responses['twoFactor'] === false) {
-    const healthcareAddendum = industry === 'healthcare' ? ' This is particularly critical for HIPAA compliance.' : '';
-    const financeAddendum = industry === 'finance' ? ' This is essential for financial regulatory compliance.' : '';
+    const healthcareAddendum = industry && industry === 'healthcare' ? ' This is particularly critical for HIPAA compliance.' : '';
+    const financeAddendum = industry && industry === 'finance' ? ' This is essential for financial regulatory compliance.' : '';
     
     recommendations.push({
       assessmentId: assessment.id,
@@ -66,11 +68,11 @@ function generateRecommendations(assessment: Assessment): InsertRecommendation[]
   // Data Encryption
   if (responses['dataEncryption'] === false) {
     let industrySpecific = '';
-    if (industry === 'healthcare') {
+    if (industry && industry === 'healthcare') {
       industrySpecific = ' For healthcare organizations, this is a HIPAA requirement and should include encryption of all PHI.';
-    } else if (industry === 'finance') {
+    } else if (industry && industry === 'finance') {
       industrySpecific = ' Financial institutions should prioritize encryption of all PII and financial data to comply with regulations like PCI DSS.';
-    } else if (industry === 'retail') {
+    } else if (industry && industry === 'retail') {
       industrySpecific = ' Retailers should focus on PCI DSS compliance for payment data encryption.';
     }
     
@@ -219,13 +221,13 @@ function generateRecommendations(assessment: Assessment): InsertRecommendation[]
     let complianceRec = 'Identify applicable compliance requirements';
     let complianceDetails = 'Determine which regulatory frameworks apply to your organization based on your industry, location, and data types. Develop a compliance roadmap.';
     
-    if (industry === 'healthcare') {
+    if (industry && industry === 'healthcare') {
       complianceRec = 'Implement HIPAA compliance program';
       complianceDetails = 'Establish a comprehensive HIPAA compliance program including risk analysis, policies/procedures, workforce training, and business associate management.';
-    } else if (industry === 'finance') {
+    } else if (industry && industry === 'finance') {
       complianceRec = 'Implement financial services compliance program';
       complianceDetails = 'Establish a comprehensive compliance program addressing relevant financial regulations, including data protection, privacy, and security requirements.';
-    } else if (industry === 'retail' || responses['complianceFrameworks']?.includes('pci_dss')) {
+    } else if ((industry && industry === 'retail') || responses['complianceFrameworks']?.includes('pci_dss')) {
       complianceRec = 'Implement PCI DSS compliance program';
       complianceDetails = 'Establish a comprehensive PCI DSS compliance program to protect payment card data, including network security, access controls, and regular testing.';
     }
