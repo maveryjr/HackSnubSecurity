@@ -69,6 +69,9 @@ export default function Header() {
               <Link href="/blog" className="header-item opacity-0 transform -translate-y-2 transition-all duration-500 hover:text-[#ADFF6C]">
                 Resources
               </Link>
+              <Link href="/assessment" className="header-item opacity-0 transform -translate-y-2 transition-all duration-500 hover:text-[#ADFF6C]">
+                Security Assessment
+              </Link>
               <a 
                 href="#contact" 
                 className="header-item opacity-0 transform -translate-y-2 transition-all duration-500 bg-[#ADFF6C] hover:bg-[#8DCC4C] text-[#1A1A1A] font-['Outfit'] font-bold py-2 px-4 rounded-md"
@@ -90,6 +93,9 @@ export default function Header() {
               </Link>
               <Link href="/blog" className="header-item opacity-0 transform -translate-y-2 transition-all duration-500 hover:text-[#ADFF6C]">
                 Resources
+              </Link>
+              <Link href="/assessment" className="header-item opacity-0 transform -translate-y-2 transition-all duration-500 hover:text-[#ADFF6C]">
+                Security Assessment
               </Link>
               <Link href="/#contact" className="header-item opacity-0 transform -translate-y-2 transition-all duration-500 bg-[#ADFF6C] hover:bg-[#8DCC4C] text-[#1A1A1A] font-['Outfit'] font-bold py-2 px-4 rounded-md">
                 Get Started
@@ -147,6 +153,13 @@ export default function Header() {
                 >
                   Resources
                 </Link>
+                <Link 
+                  href="/assessment" 
+                  className="hover:text-[#ADFF6C] transition-colors py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Security Assessment
+                </Link>
                 <a 
                   href="#contact" 
                   className="bg-[#ADFF6C] hover:bg-[#8DCC4C] text-[#1A1A1A] font-['Outfit'] font-bold py-2 px-4 rounded-md transition-colors text-center mt-2"
@@ -185,6 +198,13 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Resources
+                </Link>
+                <Link 
+                  href="/assessment" 
+                  className="hover:text-[#ADFF6C] transition-colors py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Security Assessment
                 </Link>
                 <Link 
                   href="/#contact" 
