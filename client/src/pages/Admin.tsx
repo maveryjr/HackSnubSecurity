@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Lead, Assessment } from "@shared/schema";
+import { Lead, Assessment, Recommendation } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -109,9 +109,12 @@ export default function Admin() {
   });
 
   // Function to get recommendations for a specific assessment
-  const { data: recommendations, isLoading: recommendationsLoading } = useQuery({
-    queryKey: ['/api/assessments', selectedAssessment?.id],
-    enabled: !!selectedAssessment,
+  const { data: recommendations, isLoading: recommendationsLoading } = useQuery<{
+    assessment: Assessment;
+    recommendations: Recommendation[];
+  }>({
+    queryKey: ['/api/assessments', selectedAssessment?.id], 
+    enabled: !!selectedAssessment
   });
 
   // Dashboard metrics
@@ -484,9 +487,9 @@ export default function Admin() {
                             <div className="flex justify-center py-10">
                               <div className="w-8 h-8 border-4 border-[#ADFF6C] border-t-transparent rounded-full animate-spin"></div>
                             </div>
-                          ) : recommendations && recommendations.recommendations && recommendations.recommendations.length > 0 ? (
+                          ) : recommendations?.recommendations && Array.isArray(recommendations.recommendations) ? (
                             <div className="space-y-4">
-                              {recommendations.recommendations.map((rec: any, index: number) => (
+                              {recommendations.recommendations.map((rec: Recommendation, index: number) => (
                                 <div key={index} className="p-4 bg-[#2A2A2A] rounded-md">
                                   <div className="flex justify-between items-start">
                                     <h3 className="font-medium">{rec.recommendation}</h3>

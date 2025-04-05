@@ -762,11 +762,11 @@ export default function Assessment() {
                                 >
                                   {question.options?.map((option) => (
                                     <FormItem
-                                      key={option.value.toString()}
+                                      key={option.value?.toString() || "null"}
                                       className="flex items-center space-x-3 space-y-0"
                                     >
                                       <FormControl>
-                                        <RadioGroupItem value={option.value.toString()} />
+                                        <RadioGroupItem value={option.value?.toString() || "null"} />
                                       </FormControl>
                                       <FormLabel className="font-normal">{option.label}</FormLabel>
                                     </FormItem>
