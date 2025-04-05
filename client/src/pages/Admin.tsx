@@ -113,7 +113,7 @@ export default function Admin() {
     assessment: Assessment;
     recommendations: Recommendation[];
   }>({
-    queryKey: ['/api/assessments', selectedAssessment?.id], 
+    queryKey: selectedAssessment ? [`/api/assessments/${selectedAssessment.id}`] : [],
     enabled: !!selectedAssessment
   });
 
@@ -487,51 +487,55 @@ export default function Admin() {
                             <div className="flex justify-center py-10">
                               <div className="w-8 h-8 border-4 border-[#ADFF6C] border-t-transparent rounded-full animate-spin"></div>
                             </div>
-                          ) : recommendations?.recommendations && Array.isArray(recommendations.recommendations) ? (
-                            <div className="space-y-4">
-                              {recommendations.recommendations.map((rec: Recommendation, index: number) => (
-                                <div key={index} className="p-4 bg-[#2A2A2A] rounded-md">
-                                  <div className="flex justify-between items-start">
-                                    <h3 className="font-medium">{rec.recommendation}</h3>
-                                    <Badge className={
-                                      rec.severity.toLowerCase() === "high" ? "bg-red-500" : 
-                                      rec.severity.toLowerCase() === "medium" ? "bg-yellow-500" : 
-                                      "bg-green-500"
-                                    }>
-                                      {rec.severity}
-                                    </Badge>
-                                  </div>
-                                  <p className="text-sm text-gray-400 mt-2">{rec.implementationDetails}</p>
-                                  
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm">
-                                    {rec.benefits && (
-                                      <div>
-                                        <span className="text-gray-500">Benefits:</span>
-                                        <p className="text-gray-300">{rec.benefits}</p>
-                                      </div>
-                                    )}
-                                    
-                                    <div className="space-y-1">
-                                      {rec.estimatedCost && (
-                                        <div className="flex items-center">
-                                          <span className="text-gray-500 mr-2">Est. Cost:</span>
-                                          <span className="text-gray-300">{rec.estimatedCost}</span>
-                                        </div>
-                                      )}
-                                      
-                                      {rec.timeframe && (
-                                        <div className="flex items-center">
-                                          <span className="text-gray-500 mr-2">Timeframe:</span>
-                                          <span className="text-gray-300">{rec.timeframe}</span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
                           ) : (
-                            <div className="text-center py-8 text-gray-400">No recommendations found</div>
+                            <div>
+                              {recommendations && recommendations.recommendations && recommendations.recommendations.length > 0 ? (
+                                <div className="space-y-4">
+                                  {recommendations.recommendations.map((rec, index) => (
+                                    <div key={index} className="p-4 bg-[#2A2A2A] rounded-md">
+                                      <div className="flex justify-between items-start">
+                                        <h3 className="font-medium">{rec.recommendation}</h3>
+                                        <Badge className={
+                                          rec.severity === "high" ? "bg-red-500" : 
+                                          rec.severity === "medium" ? "bg-yellow-500" : 
+                                          "bg-green-500"
+                                        }>
+                                          {rec.severity}
+                                        </Badge>
+                                      </div>
+                                      <p className="text-sm text-gray-400 mt-2">{rec.implementationDetails}</p>
+                                      
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm">
+                                        {rec.benefits && (
+                                          <div>
+                                            <span className="text-gray-500">Benefits:</span>
+                                            <p className="text-gray-300">{rec.benefits}</p>
+                                          </div>
+                                        )}
+                                        
+                                        <div className="space-y-1">
+                                          {rec.estimatedCost && (
+                                            <div className="flex items-center">
+                                              <span className="text-gray-500 mr-2">Est. Cost:</span>
+                                              <span className="text-gray-300">{rec.estimatedCost}</span>
+                                            </div>
+                                          )}
+                                          
+                                          {rec.timeframe && (
+                                            <div className="flex items-center">
+                                              <span className="text-gray-500 mr-2">Timeframe:</span>
+                                              <span className="text-gray-300">{rec.timeframe}</span>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="text-center py-8 text-gray-400">No recommendations found</div>
+                              )}
+                            </div>
                           )}
                         </CardContent>
                       </Card>
