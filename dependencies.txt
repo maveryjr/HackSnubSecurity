@@ -1,0 +1,32 @@
+# HackSnub Dependency Installation Guide
+
+## Production Dependencies
+
+npm install @hookform/resolvers @jridgewell/trace-mapping @neondatabase/serverless @radix-ui/react-accordion @radix-ui/react-alert-dialog @radix-ui/react-aspect-ratio @radix-ui/react-avatar @radix-ui/react-checkbox @radix-ui/react-collapsible @radix-ui/react-context-menu @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-hover-card @radix-ui/react-label @radix-ui/react-menubar @radix-ui/react-navigation-menu @radix-ui/react-popover @radix-ui/react-progress @radix-ui/react-radio-group @radix-ui/react-scroll-area @radix-ui/react-select @radix-ui/react-separator @radix-ui/react-slider @radix-ui/react-slot @radix-ui/react-switch @radix-ui/react-tabs @radix-ui/react-toast @radix-ui/react-toggle @radix-ui/react-toggle-group @radix-ui/react-tooltip @replit/vite-plugin-shadcn-theme-json @sendgrid/mail @tanstack/react-query class-variance-authority clsx cmdk connect-pg-simple date-fns drizzle-orm drizzle-zod embla-carousel-react express express-session framer-motion input-otp lucide-react memorystore openai passport passport-local postgres react react-day-picker react-dom react-hook-form react-icons react-resizable-panels recharts tailwind-merge tailwindcss-animate vaul wouter ws zod zod-validation-error
+
+## Development Dependencies
+
+npm install @replit/vite-plugin-cartographer @replit/vite-plugin-runtime-error-modal @tailwindcss/typography @types/connect-pg-simple @types/express @types/express-session @types/node @types/passport @types/passport-local @types/react @types/react-dom @types/ws @vitejs/plugin-react autoprefixer drizzle-kit esbuild postcss tailwindcss tsx typescript vite --save-dev
+
+## Environment Variables
+
+# Database Configuration
+DATABASE_URL=postgres://user:password@localhost:5432/hacksnub
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=hacksnub
+PGUSER=your_user
+PGPASSWORD=your_password
+
+# Email Service (SendGrid)
+SENDGRID_API_KEY=your_sendgrid_key
+
+## Scripts for package.json
+
+"scripts": {
+  "dev": "tsx server/index.ts",
+  "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+  "start": "NODE_ENV=production node dist/index.js",
+  "check": "tsc",
+  "db:push": "drizzle-kit push"
+}
